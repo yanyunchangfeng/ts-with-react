@@ -1,11 +1,12 @@
 import React, {useState,useEffect} from 'react'
-
+import useMousePosition from '../hooks/useMousePosition'
 const LikeButton:React.FC =()=>{
     // const [like,setLike] = useState(0)
     // const [obj,setObj] = useState({like:0,on:true})
     // 拆分
     const [like,setLike] = useState(0)
     const [on,setOn] = useState(true)
+    const positions = useMousePosition()
     //空节点包含两个button
     // return (
     //     <>
@@ -27,6 +28,7 @@ const LikeButton:React.FC =()=>{
     },[like,on])
         return (
         <>
+        <h2>X:{positions.x} Y:{positions.y}</h2>
             <button onClick ={()=>{ 
                 setLike(like+1)
             }}>
