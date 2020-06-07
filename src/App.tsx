@@ -7,18 +7,33 @@ import ClassLike from './components/classLike';
 import useMousePosition from './hooks/useMousePosition';
 import useURLLoader from './hooks/useURLLoader';
 import './App.css';
+
+interface IThemeProps {
+  [key:string]:{color: string;background:string}
+}
 interface IShowResult {
    message:string;
    status:string;
 }
-// const DogShow:React.FC<{data:IShowResult}> = ({data})=>{
-//    return(
-//      <>
-//        <h2>Dog show:{data.status}</h2>
-//        <img src={data.message}/>
-//      </>
-//    )
-// }
+const themes:IThemeProps = {
+  'light':{
+    color:'#000',
+    background:'#eee'
+  },
+  'dark':{
+    color:'#fff',
+    background:'#222'
+  }
+}
+const DogShow:React.FC<{data:IShowResult}> = ({data})=>{
+   return(
+     <>
+       <h2>Dog show:{data.status}</h2>
+       <img src={data.message}/>
+     </>
+   )
+}
+export const ThemeContext = React.createContext(themes.light)
 const  App:React.FC = () => {
   const [show,setShow] = useState(true)
   const positions = useMousePosition()
@@ -26,6 +41,7 @@ const  App:React.FC = () => {
   const DogResult = data as IShowResult;
   return (
     <div className="App">
+      <ThemeContext.Provider value={themes.light}>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -46,6 +62,7 @@ const  App:React.FC = () => {
           Learn React
         </a>
       </header>
+      </ThemeContext.Provider>
     </div>
   );
 }
