@@ -35,13 +35,21 @@ const DogShow:React.FC<{data:IShowResult}> = ({data})=>{
 }
 export const ThemeContext = React.createContext(themes.light)
 const  App:React.FC = () => {
-  const [show,setShow] = useState(true)
+  const [show,setShow] = useState(true);
+  const [theme,setTheme]= useState(themes.light)
   const positions = useMousePosition()
   const [data,loading]  = useURLLoader('https://dog.ceo/api/breeds/image/random',[show])
   const DogResult = data as IShowResult;
+  function toggleTheme (){
+    if(theme.color === '#000'){
+      setTheme(themes.dark)
+      return
+    }
+    setTheme(themes.light)
+  }
   return (
     <div className="App">
-      <ThemeContext.Provider value={themes.light}>
+      <ThemeContext.Provider value={theme}>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -49,6 +57,7 @@ const  App:React.FC = () => {
         </p>
         <p>X:{positions.x} Y:{positions.y}</p>
         {loading?<p>读取中</p>:<img src={DogResult&&DogResult.message}/>}
+        <button onClick={()=> toggleTheme()}>Toggle THEME</button>
         <Hello message="Hello World"/>
         <ClassLike/>
         <LikeButton/>
