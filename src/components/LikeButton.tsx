@@ -49,7 +49,7 @@ const LikeButton:React.FC =()=>{
     },[like,on])
     useEffect(()=>{
         // console.log('rerender')
-       domRef.current?.focus() 
+    //    domRef.current?.focus() 
     })
         return (
         <>

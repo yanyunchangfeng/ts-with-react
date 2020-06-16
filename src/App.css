@@ -1,12 +1,14 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
-
+.pd-20{
+  padding: 20px !important;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -23,9 +25,17 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
+.wd-600{
+  width: 600px;
+}
 .App-link {
   color: #61dafb;
+}
+#control-hook{
+  margin: 0 auto;
+}
+#control-hook .ant-btn{
+  margin-right: 8px;
 }
 
 @keyframes App-logo-spin {

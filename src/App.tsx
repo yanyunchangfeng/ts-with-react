@@ -6,7 +6,9 @@ import MouseTracker from './components/MouseTracker';
 import ClassLike from './components/classLike';
 import useMousePosition from './hooks/useMousePosition';
 import useURLLoader from './hooks/useURLLoader';
+import {Form,Input,Button} from 'antd';
 import './App.css';
+import 'antd/dist/antd.css'
 
 interface IThemeProps {
   [key:string]:{color: string;background:string}
@@ -35,17 +37,34 @@ const DogShow:React.FC<{data:IShowResult}> = ({data})=>{
 }
 export const ThemeContext = React.createContext(themes.light)
 const  App:React.FC = () => {
+  const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+  };
+  const tailLayout = {
+    wrapperCol: { offset: 8, span: 16 },
+  };
   const [show,setShow] = useState(true);
   const [theme,setTheme]= useState(themes.light)
   const positions = useMousePosition()
   const [data,loading]  = useURLLoader('https://dog.ceo/api/breeds/image/random',[show])
   const DogResult = data as IShowResult;
+  const [form] = Form.useForm()
   function toggleTheme (){
     if(theme.color === '#000'){
       setTheme(themes.dark)
       return
     }
     setTheme(themes.light)
+  }
+  function onFinish(val:any){
+  console.log(val)
+  }
+  function onFill(){
+    form.setFieldsValue({
+      userName:'admin1',
+      userPwd:'123456'
+    })
   }
   return (
     <div className="App">
@@ -72,6 +91,22 @@ const  App:React.FC = () => {
         </a>
       </header>
       </ThemeContext.Provider>
+      <Form {...layout} onFinish={onFinish} form={form} className='pd-20 wd-600' id="control-hook">
+        <Form.Item name="userName" label="用户名" rules={[{ required: true,pattern:/^\w{6}$/ ,message:'用户名为6位数字字母或下滑线'}]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="userPwd" label="密 码" rules={[{ required: true,pattern:/^\d{6}$/, message:'密码为6位数字'}]}>
+         <Input />
+       </Form.Item>
+       <Form.Item {...tailLayout}>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+        <Button type="primary" htmlType="button" onClick={onFill}>
+            onFill
+        </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 }
