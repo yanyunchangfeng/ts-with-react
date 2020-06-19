@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import Hello from './components/Hello';
 import LikeButton from './components/LikeButton';
@@ -12,7 +12,7 @@ import 'antd/dist/antd.css'
 import RenderArray from './components/RenderArray';
 import RenderDy from './components/RenderDy';
 import Warp from './components/Warp'
-import {BrowserRouter as Router,useHistory,Route,Switch} from 'react-router-dom'
+import {HashRouter as Router,useHistory,Route,Switch,Redirect} from 'react-router-dom'
 
 
 interface IThemeProps {
@@ -42,6 +42,8 @@ const DogShow:React.FC<{data:IShowResult}> = ({data})=>{
 }
 export const ThemeContext = React.createContext(themes.light)
 const  App:React.FC = () => {
+  const history = useHistory();
+  console.log(history)
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
@@ -51,6 +53,7 @@ const  App:React.FC = () => {
   };
   const [show,setShow] = useState(true);
   const [theme,setTheme]= useState(themes.light)
+
   const positions = useMousePosition()
   const [data,loading]  = useURLLoader('https://dog.ceo/api/breeds/image/random',[show])
   const DogResult = data as IShowResult;
@@ -65,12 +68,19 @@ const  App:React.FC = () => {
   function onFinish(val:any){
   console.log(val)
   }
+  function goTo(path:string){
+  //  history.push('/'+path)
+  }
   function onFill(){
     form.setFieldsValue({
       userName:'admin1',
       userPwd:'123456'
     })
   }
+  useEffect(()=>{
+    // const history  =useHistory()
+    console.log(history)
+  })
   return (
      <Router>
     <div className="App">
@@ -121,13 +131,22 @@ const  App:React.FC = () => {
             onFill
         </Button>
         </Form.Item>
+        <Form.Item {...tailLayout}>
+        <Button type="primary" htmlType="button" onClick={()=>goTo('hello')}>
+          goTOHello
+        </Button>
+        <Button type="primary" htmlType="button" onClick={()=>goTo('likeButton')}>
+          goTolikeButton
+        </Button>
+        </Form.Item>
       </Form>
     </div>
 
-    <Switch>
-      {/* <Route path = "/login" component={}></Route>
-      <Route path="/public" component={}></Route> */}
-    </Switch>
+        <Switch>
+          {/* <Route path="/" render={() => <Redirect to="/hello" />}></Route> */}
+          <Route path = "/hello" component={Hello}></Route>
+          <Route path="/likeButton/:id" component={LikeButton}></Route>
+        </Switch>
     </Router>
   );
 }

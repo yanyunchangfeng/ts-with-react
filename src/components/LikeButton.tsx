@@ -1,10 +1,18 @@
 import React, {useState,useEffect, useRef,useContext} from 'react'
 import useMousePosition from '../hooks/useMousePosition'
+import {useHistory, useLocation, useParams,useRouteMatch} from 'react-router-dom'
 import {ThemeContext} from '../App'
 const LikeButton:React.FC =()=>{
     // const [like,setLike] = useState(0)
     // const [obj,setObj] = useState({like:0,on:true})
     // 拆分
+    const match = useRouteMatch('/likeButton/:id')
+    let {id} = useParams()
+    console.log(id)
+    const history = useHistory();
+    const location = useLocation();
+    console.log(history)
+    console.log(location    )
     const [like,setLike] = useState(0)
     const [on,setOn] = useState(true)
     const positions = useMousePosition()
@@ -34,9 +42,10 @@ const LikeButton:React.FC =()=>{
     //     </>
     // )
     function handleClick(){
-        setTimeout(()=>{
-          alert(`you clicked on ${likeRef.current}`)
-        },3000)
+        history.push('/hello')
+        // setTimeout(()=>{
+        //   alert(`you clicked on ${likeRef.current}`)
+        // },3000)
     }
     useEffect(()=>{
        console.log('document title effect is running')
@@ -52,7 +61,7 @@ const LikeButton:React.FC =()=>{
     //    domRef.current?.focus() 
     })
         return (
-        <>
+        match&&<>
         <input type="text" ref={domRef}/>
         <h2>X:{positions.x} Y:{positions.y}</h2>
             <button  style ={style} onClick ={()=>{ 
