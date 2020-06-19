@@ -17,7 +17,7 @@ const Hello:React.FC<IHelloProps> =(props)=>{
         background:theme.background,
         color:theme.color
     }
-return <h2 style ={style}>{props.message}</h2>
+return <h2 style ={style} >{props.message}</h2>
 }
 Hello.defaultProps = {
     message:'Hello World'

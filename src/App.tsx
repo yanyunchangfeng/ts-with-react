@@ -9,6 +9,11 @@ import useURLLoader from './hooks/useURLLoader';
 import {Form,Input,Button} from 'antd';
 import './App.css';
 import 'antd/dist/antd.css'
+import RenderArray from './components/RenderArray';
+import RenderDy from './components/RenderDy';
+import Warp from './components/Warp'
+import {BrowserRouter as Router,useHistory,Route,Switch} from 'react-router-dom'
+
 
 interface IThemeProps {
   [key:string]:{color: string;background:string}
@@ -67,8 +72,18 @@ const  App:React.FC = () => {
     })
   }
   return (
+     <Router>
     <div className="App">
       <ThemeContext.Provider value={theme}>
+        <RenderArray/>
+        <Warp>
+          {/* {RenderDy()} */}
+          <div>2</div>
+          <div>2</div>
+          <div>2</div>
+          <div>2</div>
+          <div>2</div>
+        </Warp>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -108,6 +123,12 @@ const  App:React.FC = () => {
         </Form.Item>
       </Form>
     </div>
+
+    <Switch>
+      {/* <Route path = "/login" component={}></Route>
+      <Route path="/public" component={}></Route> */}
+    </Switch>
+    </Router>
   );
 }
 
