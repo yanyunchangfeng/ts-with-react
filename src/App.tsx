@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import logo from './logo.svg';
 import Hello from './components/Hello';
 import LikeButton from './components/LikeButton';
@@ -11,8 +11,10 @@ import './App.css';
 import 'antd/dist/antd.css'
 import RenderArray from './components/RenderArray';
 import RenderDy from './components/RenderDy';
-import useCount from './hooks/useCount'
-import Warp from './components/Warp'
+import useCount from './hooks/useCount';
+import CounterMeMo from './components/memo'
+import Warp from './components/Warp';
+import Counters  from './components/Counter'
 import {HashRouter as Router,useHistory,Route,Switch,Redirect} from 'react-router-dom'
 import useCounter from './hooks/useCounter';
 
@@ -45,12 +47,21 @@ const DogShow:React.FC<{data:IShowResult}> = ({data})=>{
 export const ThemeContext = React.createContext(themes.light)
 const  App:React.FC = () => {
   const history = useHistory();
-  console.log(history)
+  // console.log(history)
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
   const [count,setCount] = useCount(0) 
+  const [clickCount,setClickCount]  = useState(0)
+  const double = useMemo(()=>{
+    return count * 2
+  },[count === 3]) //当count为3或4的时候double会改变
+
+  const half = useMemo(()=>{
+    return double/4
+  },[double])
+  // useMomo与useEffcet最大的不同就是执行时机 ，useEffect执行是在渲染之后完成的 useMemo需要返回值的 返回值可以直接参与渲染，因此是在渲染期间完成的，有这样一前一后的区别
   const Counter = useCounter(count as number)
   const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
@@ -81,15 +92,36 @@ const  App:React.FC = () => {
       userPwd:'123456'
     })
   }
+  const onClick = ()=>{
+    console.log('Click')
+  }
+  const onClickMemo = useMemo(()=>{
+    return ()=>{
+      console.log('click')
+    }
+  },[])
+  const onClickCallback = useCallback(()=>{
+    console.log('click')
+    setClickCount(clickCount=>clickCount+1)
+  },[])
+  // useMemo(()=>fn) 如果useMemo返回的是一个函数 那么就等价于useCallback
+  // useCallback(fn)
+
+  // 使用useCallback 确实会创建新的函数，但是不一定会被返回，换句话说很有可能创建的函数就直接抛弃不用了
+  // useCallback解决的问题是传入子组件的参数过多变化，导致子组件过多渲染的问题
+  // useMemo依赖发生变化一定会重新执行，但不能肯定依赖不发生变化就一定不重新执行，就是说它也可能重新执行
   useEffect(()=>{
     // const history  =useHistory()
-    console.log(history)
+    // console.log(history)
   })
   return (
      <Router>
     <div className="App">
       <ThemeContext.Provider value={theme}>
         <RenderArray/>
+        <button onClick={()=>setCount(count+1)}>Click({count}),Double({double}),Half({half}),clickCount({clickCount})</button>
+        <CounterMeMo count={double} onClick={onClickCallback}/>
+        {/* <Counters/> */}
         <Warp>
           {/* {RenderDy()} */}
           <div>2</div>

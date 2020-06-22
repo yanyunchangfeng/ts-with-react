@@ -7,12 +7,12 @@ const LikeButton:React.FC =()=>{
     // const [obj,setObj] = useState({like:0,on:true})
     // 拆分
     const match = useRouteMatch('/likeButton/:id')
-    let {id} = useParams()
-    console.log(id)
+    // let {id} = useParams()
+    // console.log(id)
     const history = useHistory();
     const location = useLocation();
-    console.log(history)
-    console.log(location)
+    // console.log(history)
+    // console.log(location)
     const [like,setLike] = useState(0)
     const [on,setOn] = useState(true)
     const positions = useMousePosition()
@@ -21,7 +21,7 @@ const LikeButton:React.FC =()=>{
     const domRef = useRef<HTMLInputElement>(null)
     // {current:12} ref 和直接一个对象有什么区别 ref在所有的render当中都保持着唯一的引用 因此对ref的取值赋值 拿到的都是最终的状态
     const theme = useContext(ThemeContext)
-    console.log(theme)
+    // console.log(theme)
     const style = {
         background:theme.background,
         color:theme.color
@@ -48,9 +48,9 @@ const LikeButton:React.FC =()=>{
         // },3000)
     }
     useEffect(()=>{
-       console.log('document title effect is running')
+    //    console.log('document title effect is running')
        if(didUpdateRef.current){
-         console.log('componentDidUpdate')
+        //  console.log('componentDidUpdate')
        }else{
            didUpdateRef.current = true
        }

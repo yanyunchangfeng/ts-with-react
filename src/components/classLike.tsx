@@ -12,7 +12,7 @@ export default class ClassLike extends React.Component{
         
     }
     componentDidMount(){
-        console.log('class')
+        // console.log('class')
         document.title = `you clicked${this.state.count}`
     }
     componentDidUpdate(){
