@@ -11,8 +11,10 @@ import './App.css';
 import 'antd/dist/antd.css'
 import RenderArray from './components/RenderArray';
 import RenderDy from './components/RenderDy';
+import useCount from './hooks/useCount'
 import Warp from './components/Warp'
 import {HashRouter as Router,useHistory,Route,Switch,Redirect} from 'react-router-dom'
+import useCounter from './hooks/useCounter';
 
 
 interface IThemeProps {
@@ -48,6 +50,8 @@ const  App:React.FC = () => {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
+  const [count,setCount] = useCount(0) 
+  const Counter = useCounter(count as number)
   const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
   };
@@ -115,6 +119,7 @@ const  App:React.FC = () => {
           Learn React
         </a>
       </header>
+      {Counter}
       </ThemeContext.Provider>
       <Form {...layout} onFinish={onFinish} form={form} className='pd-20 wd-600' id="control-hook">
         <Form.Item name="userName" label="用户名" rules={[{ required: true,pattern:/^\w{6}$/ ,message:'用户名为6位数字字母或下滑线'}]}>
@@ -132,11 +137,8 @@ const  App:React.FC = () => {
         </Button>
         </Form.Item>
         <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="button" onClick={()=>goTo('hello')}>
-          goTOHello
-        </Button>
-        <Button type="primary" htmlType="button" onClick={()=>goTo('likeButton')}>
-          goTolikeButton
+        <Button type="primary" htmlType="button" onClick={()=>setCount(count+1)}>
+            setCount
         </Button>
         </Form.Item>
       </Form>
@@ -144,7 +146,10 @@ const  App:React.FC = () => {
 
         <Switch>
           {/* <Route path="/" render={() => <Redirect to="/hello" />}></Route> */}
-          <Route path = "/hello" component={Hello}></Route>
+          <Route path = "/hello"  render={(val)=>{
+      console.log(val)
+          return <Redirect to={{pathname:'login',state:{from:val}}}/>
+          }}></Route>
           <Route path="/likeButton/:id" component={LikeButton}></Route>
         </Switch>
     </Router>

@@ -12,7 +12,7 @@ const LikeButton:React.FC =()=>{
     const history = useHistory();
     const location = useLocation();
     console.log(history)
-    console.log(location    )
+    console.log(location)
     const [like,setLike] = useState(0)
     const [on,setOn] = useState(true)
     const positions = useMousePosition()
