@@ -9,6 +9,7 @@ import useURLLoader from './hooks/useURLLoader';
 import {Form,Input,Button} from 'antd';
 import './App.css';
 import 'antd/dist/antd.css'
+import axios from 'axios'
 import RenderArray from './components/RenderArray';
 import RenderDy from './components/RenderDy';
 import useCount from './hooks/useCount';
@@ -113,6 +114,9 @@ const  App:React.FC = () => {
   useEffect(()=>{
     // const history  =useHistory()
     // console.log(history)
+    axios.get('/posts').then(data=>{
+      console.log(data)
+    })
   })
   return (
      <Router>

@@ -15,8 +15,8 @@ const LikeButton:React.FC =()=>{
     // console.log(location)
     const [like,setLike] = useState(0)
     const [on,setOn] = useState(true)
+    const likeRef = useRef(0);
     const positions = useMousePosition()
-    const likeRef = useRef(0)
     const didUpdateRef = useRef(false);// 模拟生命周期componentDidUpdate
     const domRef = useRef<HTMLInputElement>(null)
     // {current:12} ref 和直接一个对象有什么区别 ref在所有的render当中都保持着唯一的引用 因此对ref的取值赋值 拿到的都是最终的状态
@@ -50,16 +50,12 @@ const LikeButton:React.FC =()=>{
     useEffect(()=>{
     //    console.log('document title effect is running')
        if(didUpdateRef.current){
-        //  console.log('componentDidUpdate')
+         console.log('componentDidUpdate')
        }else{
            didUpdateRef.current = true
        }
        document.title = `点击了${like}次`
     },[like,on])
-    useEffect(()=>{
-        // console.log('rerender')
-    //    domRef.current?.focus() 
-    })
         return (
         match&&<>
         <input type="text" ref={domRef}/>

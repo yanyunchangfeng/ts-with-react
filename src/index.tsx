@@ -12,7 +12,7 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+serviceWorker.register();
 
 // npx 小知识
 // 1.避免安装全局模块
@@ -20,3 +20,4 @@ serviceWorker.unregister();
 // 2. 调用项目内部安装的模块  dev中的mocha测试工具想要直接使用 直接通过npx 调用即可
 // 每当执行npm run 的时候 会创建一个sheel 在这个sheel 里执行指定的脚本命令  比较特别的是 npm run 会将node-module/.bin/子目录加入path变量
 // 执行结束后再将path变量恢复原样
+console.log(process.env.REACT_APP_BaseUrl)
