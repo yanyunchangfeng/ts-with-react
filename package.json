@@ -21,8 +21,8 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "api":"json-server --watch mock/user.json --port 3002 ",
-    "start": "dotenv -e .env.production react-scripts start  && npm run api ",
+    "api": "json-server --watch mock/user.json --port 3002 ",
+    "start": "dotenv -e .env.production react-scripts start ",
     "build": "dotenv -e .env.production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -44,7 +44,6 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.5",
-    "dotenv": "^8.2.0",
     "dotenv-cli": "^3.1.0"
   }
 }

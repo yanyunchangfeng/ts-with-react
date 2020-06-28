@@ -18,6 +18,7 @@ import Warp from './components/Warp';
 import Counters  from './components/Counter'
 import {HashRouter as Router,useHistory,Route,Switch,Redirect} from 'react-router-dom'
 import useCounter from './hooks/useCounter';
+import TodoList from './components/TodoList'
 
 
 interface IThemeProps {
@@ -122,42 +123,34 @@ const  App:React.FC = () => {
      <Router>
     <div className="App">
       <ThemeContext.Provider value={theme}>
-        <RenderArray/>
-        <button onClick={()=>setCount(count+1)}>Click({count}),Double({double}),Half({half}),clickCount({clickCount})</button>
-        <CounterMeMo count={double} onClick={onClickCallback}/>
-        {/* <Counters/> */}
-        <Warp>
-          {/* {RenderDy()} */}
-          <div>2</div>
-          <div>2</div>
-          <div>2</div>
-          <div>2</div>
-          <div>2</div>
-        </Warp>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
+        <TodoList/>
+        {/* <RenderArray/> */}
+        {/* <button onClick={()=>setCount(count+1)}>Click({count}),Double({double}),Half({half}),clickCount({clickCount})</button> */}
+        {/* <CounterMeMo count={double} onClick={onClickCallback}/> */}
+      {/* <header className="App-header"> */}
+        {/* <img src={logo} className="App-logo" alt="logo" /> */}
+        {/* <p>
           <button onClick={()=>{setShow(!show)}}>Refresh Dog Photo</button>
-        </p>
-        <p>X:{positions.x} Y:{positions.y}</p>
-        {loading?<p>读取中</p>:<img src={DogResult&&DogResult.message}/>}
-        <button onClick={()=> toggleTheme()}>Toggle THEME</button>
-        <Hello message="Hello World"/>
-        <ClassLike/>
-        <LikeButton/>
-        {show&&<MouseTracker/>}
-        <a
+        </p> */}
+        {/* <p>X:{positions.x} Y:{positions.y}</p> */}
+        {/* {loading?<p>读取中</p>:<img src={DogResult&&DogResult.message}/>} */}
+        {/* <button onClick={()=> toggleTheme()}>Toggle THEME</button> */}
+        {/* <Hello message="Hello World"/> */}
+        {/* <ClassLike/> */}
+        {/* <LikeButton/> */}
+        {/* {show&&<MouseTracker/>} */}
+        {/* <a
           className="App-link"
           href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
           Learn React
-        </a>
-      </header>
-      {Counter}
+        </a> */}
+      {/* </header> */}
+      {/* {Counter} */}
       </ThemeContext.Provider>
-      <Form {...layout} onFinish={onFinish} form={form} className='pd-20 wd-600' id="control-hook">
+      {/* <Form {...layout} onFinish={onFinish} form={form} className='pd-20 wd-600' id="control-hook">
         <Form.Item name="userName" label="用户名" rules={[{ required: true,pattern:/^\w{6}$/ ,message:'用户名为6位数字字母或下滑线'}]}>
           <Input />
         </Form.Item>
@@ -177,17 +170,17 @@ const  App:React.FC = () => {
             setCount
         </Button>
         </Form.Item>
-      </Form>
+      </Form> */}
     </div>
-
+{/* 
         <Switch>
-          {/* <Route path="/" render={() => <Redirect to="/hello" />}></Route> */}
+          <Route path="/" render={() => <Redirect to="/hello" />}></Route>
           <Route path = "/hello"  render={(val)=>{
       console.log(val)
           return <Redirect to={{pathname:'login',state:{from:val}}}/>
           }}></Route>
           <Route path="/likeButton/:id" component={LikeButton}></Route>
-        </Switch>
+        </Switch> */}
     </Router>
   );
 }

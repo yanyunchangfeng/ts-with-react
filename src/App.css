@@ -28,6 +28,9 @@
 .wd-600{
   width: 600px;
 }
+.complete{
+  text-decoration: line-through;
+}
 .App-link {
   color: #61dafb;
 }
