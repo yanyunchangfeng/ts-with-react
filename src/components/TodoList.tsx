@@ -1,19 +1,23 @@
 import React ,{FC, useState, useCallback, useEffect}from 'react'
 import {Form, Input, Checkbox, Button } from 'antd'
 let idSeq = Date.now();
+interface List {
+    text:string;
+    complete:boolean;
+    id:number
+}
 interface ICprops{
-    addTodo:Function;
+    addTodo:(obj:List) => void
 }
-interface ITprops{
-    removeTodo:Function;
-    toggleTodo:Function;
-    todos:any
+interface CommonProps {
+    removeTodo:(id:number) => void;
+    toggleTodo:(id:number) => void;
 }
-
-interface ITItem{
-    removeTodo:Function;
-    toggleTodo:Function;
-    todo:any
+interface ITprops extends CommonProps{
+    todos:List[]
+}
+interface ITItem extends CommonProps{
+    todo:List
 }
 
 const LS_KEY = '_$-todos_';
@@ -59,7 +63,7 @@ return <li>
 }
 const Todos:FC<ITprops> = (props)=>{
     console.log(props.todos)
-    const {todos ,toggleTodo ,removeTodo} = props
+    const {todos,removeTodo,toggleTodo} = props
     return (
         <ul>
             {
@@ -69,17 +73,17 @@ const Todos:FC<ITprops> = (props)=>{
     )
 }
 const TodoList:FC= ()=>{
-   const [todos,setTodos] = useState<any>([])
-   const addTodo = useCallback((todo:any)=>{
-       setTodos((todos:any) => [...todos,todo])
+   const [todos,setTodos] = useState<List[]>([])
+   const addTodo = useCallback((todo:List)=>{
+       setTodos((todos:List[]) => [...todos,todo])
    },[])
    const removeTodo = useCallback((id:number)=>{
-      setTodos((todos:any) => todos.filter((todo:any) => {
+      setTodos((todos:List []) => todos.filter((todo:any) => {
           return todo.id !== id
       }))
    },[])
    const toggleTodo = useCallback((id:number)=>{
-        setTodos((todos:any)=>todos.map((todo:any)=>{
+        setTodos((todos:List [])=>todos.map((todo:List)=>{
             return todo.id === id ? {...todo,complete:!todo.complete}:todo
         }))
    },[])
