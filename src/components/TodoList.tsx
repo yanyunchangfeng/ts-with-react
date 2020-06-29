@@ -1,39 +1,51 @@
 import React ,{FC, useState, useCallback, useEffect, ChangeEvent, useRef, RefObject}from 'react'
 import {Form, Input, Checkbox, Button } from 'antd'
 import { List } from 'antd/lib/form/Form';
+import {createAdd,createRemove,createEdit,createToggle} from '../action'
 let idSeq = Date.now();
 interface List {
     text:string;
     complete:boolean;
     id:number
 }
-interface ICprops{
-    addTodo:(obj:List) => void
+interface Idpt{
+    dispatch:(act:IAction<any>)=>void
+}
+interface ICprops  extends Idpt{
 }
 interface CommonProps {
     removeTodo:(id:number) => void;
     toggleTodo:(id:number) => void;
     editTodo:(id:number,text:string) => void
 }
-interface ITprops extends CommonProps{
+interface ITprops extends Idpt{
     todos:List[]
 }
-interface ITItem extends CommonProps{
+interface ITItem extends Idpt{
     todo:List
 }
-
+interface IAction<T>{
+    type:string;
+    payload:T;
+}
+interface Iedit{
+    id:number;
+    text:string;
+}
 const LS_KEY = '_$-todos_';
 const Control:FC<ICprops> = (props)=>{
-    const { addTodo } = props
+    const { dispatch } = props
     const [form] = Form.useForm()
     const onFinish = (val:any)=>{
     const todoVal = val.todo.trim();
     if(!todoVal) return
-    addTodo({
+   dispatch( 
+       createAdd<List>({
         id:++idSeq,
         text:todoVal,
         complete:false
     })
+    )
      form.setFieldsValue({
          'todo':''
      })
@@ -49,14 +61,15 @@ const Control:FC<ICprops> = (props)=>{
 }
 
 const TodoItem:FC<ITItem> =(props)=>{
-     const {todo:{id,complete,text} ,toggleTodo,removeTodo,editTodo}  =  props
+     const {todo:{id,complete,text} ,dispatch}  =  props
      const [editable,setEditable] = useState(false)
      const LabelRef = useRef<HTMLLabelElement>(null)
      const onChange = () => {
-         toggleTodo(id)
+         dispatch(createToggle<number>(id))
      }
      const onRemove = () =>{
-         removeTodo(id)
+
+         dispatch(createRemove<number>(id))
      }
      const onDouble = ()=>{
         setEditable(true)
@@ -64,7 +77,7 @@ const TodoItem:FC<ITItem> =(props)=>{
      const onKeyUpChange = () =>{
          console.log(LabelRef.current?.innerHTML)
          const text = LabelRef.current?.innerHTML || ''
-         editTodo(id,text)
+         dispatch(createEdit<Iedit>({id,text}))
      }
 return <li>
         <Checkbox onChange ={onChange} checked={complete}/>
@@ -74,16 +87,16 @@ return <li>
 }
 const Todos:FC<ITprops> = (props)=>{
     console.log(props.todos)
-    const {todos,removeTodo,toggleTodo,editTodo} = props
+    const {todos,dispatch} = props
     return (
         <ul>
             {
-                todos.map((todo:List) => <TodoItem key={todo.id} todo={todo} removeTodo={removeTodo} toggleTodo ={toggleTodo} editTodo={editTodo}/>)
+                todos.map((todo:List) => <TodoItem key={todo.id} todo={todo} dispatch={dispatch}/>)
             }
         </ul>
     )
 }
-const TodoList:FC= ()=>{
+const TodoList:FC = ()=>{
    const [todos,setTodos] = useState<List[]>([])
    const addTodo = useCallback((todo:List)=>{
        setTodos((todos:List[]) => [...todos,todo])
@@ -103,6 +116,30 @@ const TodoList:FC= ()=>{
          return todo.id === id ?{...todo,text:text}:todo
      }))
    },[])
+
+   const dispatch = (action:IAction<any>) =>{
+     const {type,payload} = action
+     switch(type){
+        case 'add':
+            setTodos((todos:List[]) => [...todos,payload]);
+            break;
+        case 'toggle':
+            setTodos((todos:List [])=>todos.map((todo:List)=>{
+                return todo.id === payload ? {...todo,complete:!todo.complete}:todo
+            }));
+            break;
+        case 'remove':
+            setTodos((todos:List []) => todos.filter((todo:any) => {
+                return todo.id !== payload
+            }));
+            break;
+        case 'edit': 
+        setTodos((todos:List[])=> todos.map((todo:List)=>{
+            return todo.id === payload.id ?{...todo,text:payload.text}:todo
+        }))
+
+     }
+   }
    useEffect(()=>{
     const todos = JSON.parse(localStorage.getItem(LS_KEY)||'[]')
     setTodos(todos)
@@ -114,8 +151,8 @@ const TodoList:FC= ()=>{
   
    return (
        <div className="todo-list">
-           <Control addTodo={addTodo}/>
-           <Todos removeTodo={removeTodo} toggleTodo={toggleTodo} todos={todos} editTodo={editTodo}/>
+           <Control dispatch={dispatch}/>
+           <Todos  todos={todos} dispatch={dispatch}/>
        </div>
    )
 }
