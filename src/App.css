@@ -50,3 +50,36 @@
     transform: rotate(360deg);
   }
 }
+
+.border{
+ background-color: black;
+ background-image: linear-gradient(to right,#5D5D5B, #383838);
+ width: 280px; 
+ padding: 7px;
+ box-sizing: border-box;
+ position: relative;
+ box-shadow: -10px 10px 2px 2px rgba(0, 0, 0, 0.1);
+ margin-left: 50px;
+}
+.border::before{
+  content: '';
+  display: block;
+  padding-bottom: 140%;
+}
+.img-container{
+  background-color: white;
+  padding: 18px;
+  position: absolute;
+  width: 94%;
+  height: 95%;
+  top:2.5%;
+  left:3%
+}
+.image{
+  background-image: url(./logo.svg);
+  width: 100%;
+  height: 100%;
+  background-size:contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}

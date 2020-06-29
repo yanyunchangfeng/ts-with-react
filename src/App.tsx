@@ -122,6 +122,11 @@ const  App:React.FC = () => {
   return (
      <Router>
     <div className="App">
+      <div className="border">
+         <div className="img-container">
+            <div className="image"></div>
+         </div>
+      </div>
       <ThemeContext.Provider value={theme}>
         <TodoList/>
         {/* <RenderArray/> */}
