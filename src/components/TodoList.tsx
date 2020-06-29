@@ -1,5 +1,6 @@
-import React ,{FC, useState, useCallback, useEffect}from 'react'
+import React ,{FC, useState, useCallback, useEffect, ChangeEvent, useRef, RefObject}from 'react'
 import {Form, Input, Checkbox, Button } from 'antd'
+import { List } from 'antd/lib/form/Form';
 let idSeq = Date.now();
 interface List {
     text:string;
@@ -12,6 +13,7 @@ interface ICprops{
 interface CommonProps {
     removeTodo:(id:number) => void;
     toggleTodo:(id:number) => void;
+    editTodo:(id:number,text:string) => void
 }
 interface ITprops extends CommonProps{
     todos:List[]
@@ -47,27 +49,36 @@ const Control:FC<ICprops> = (props)=>{
 }
 
 const TodoItem:FC<ITItem> =(props)=>{
-     const {todo:{id,complete,text} ,toggleTodo,removeTodo}  =  props
-
+     const {todo:{id,complete,text} ,toggleTodo,removeTodo,editTodo}  =  props
+     const [editable,setEditable] = useState(false)
+     const LabelRef = useRef<HTMLLabelElement>(null)
      const onChange = () => {
          toggleTodo(id)
      }
      const onRemove = () =>{
          removeTodo(id)
      }
+     const onDouble = ()=>{
+        setEditable(true)
+     }
+     const onKeyUpChange = () =>{
+         console.log(LabelRef.current?.innerHTML)
+         const text = LabelRef.current?.innerHTML || ''
+         editTodo(id,text)
+     }
 return <li>
         <Checkbox onChange ={onChange} checked={complete}/>
-        <label className={complete?'complete':''}>{text}</label>
+        <label className={complete?'complete':''} contentEditable={editable} onDoubleClick={onDouble} onKeyUp={ onKeyUpChange} suppressContentEditableWarning ref={LabelRef}>{text}</label>
         <Button onClick={onRemove}  size="small">❌</Button>
     </li>
 }
 const Todos:FC<ITprops> = (props)=>{
     console.log(props.todos)
-    const {todos,removeTodo,toggleTodo} = props
+    const {todos,removeTodo,toggleTodo,editTodo} = props
     return (
         <ul>
             {
-                todos.map((todo:any) => <TodoItem key={todo.id} todo={todo} removeTodo={removeTodo} toggleTodo ={toggleTodo}/>)
+                todos.map((todo:List) => <TodoItem key={todo.id} todo={todo} removeTodo={removeTodo} toggleTodo ={toggleTodo} editTodo={editTodo}/>)
             }
         </ul>
     )
@@ -87,6 +98,11 @@ const TodoList:FC= ()=>{
             return todo.id === id ? {...todo,complete:!todo.complete}:todo
         }))
    },[])
+   const editTodo = useCallback((id:number,text:string)=>{
+     setTodos((todos:List[])=> todos.map((todo:List)=>{
+         return todo.id === id ?{...todo,text:text}:todo
+     }))
+   },[])
    useEffect(()=>{
     const todos = JSON.parse(localStorage.getItem(LS_KEY)||'[]')
     setTodos(todos)
@@ -99,7 +115,7 @@ const TodoList:FC= ()=>{
    return (
        <div className="todo-list">
            <Control addTodo={addTodo}/>
-           <Todos removeTodo={removeTodo} toggleTodo={toggleTodo} todos={todos}/>
+           <Todos removeTodo={removeTodo} toggleTodo={toggleTodo} todos={todos} editTodo={editTodo}/>
        </div>
    )
 }
