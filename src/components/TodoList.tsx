@@ -3,13 +3,31 @@ import {Form, Input, Checkbox, Button } from 'antd'
 import { List } from 'antd/lib/form/Form';
 import {createAdd,createRemove,createEdit,createToggle} from '../action'
 let idSeq = Date.now();
+
+
+type dispatch = (action:IAction<any>) => void 
+interface actionCreators {
+    [key:string]:(...arg:any) => any
+}
+function bindActionCreateor(actionCreators:actionCreators,dispatch:dispatch){
+    const ret:any = {};
+    for (let key in actionCreators){
+        ret[key] = function(...args:any){
+             const actionCreator = actionCreators[key]
+             const action = actionCreator(...args)
+             dispatch(action)
+        }
+    }
+    return ret
+}
 interface List {
     text:string;
     complete:boolean;
     id:number
 }
 interface Idpt{
-    dispatch:(act:IAction<any>)=>void
+    // dispatch:(act:IAction<any>)=>void
+    [key:string]:any
 }
 interface ICprops  extends Idpt{
 }
@@ -34,18 +52,18 @@ interface Iedit{
 }
 const LS_KEY = '_$-todos_';
 const Control:FC<ICprops> = (props)=>{
-    const { dispatch } = props
+    const { addTodo } = props
     const [form] = Form.useForm()
     const onFinish = (val:any)=>{
     const todoVal = val.todo.trim();
     if(!todoVal) return
-   dispatch( 
-       createAdd<List>({
+   addTodo( 
+       {
         id:++idSeq,
         text:todoVal,
         complete:false
-    })
-    )
+       })
+    
      form.setFieldsValue({
          'todo':''
      })
@@ -61,15 +79,17 @@ const Control:FC<ICprops> = (props)=>{
 }
 
 const TodoItem:FC<ITItem> =(props)=>{
-     const {todo:{id,complete,text} ,dispatch}  =  props
+     const {todo:{id,complete,text} ,toggleTodo,editTodo,removeTodo}  =  props
      const [editable,setEditable] = useState(false)
      const LabelRef = useRef<HTMLLabelElement>(null)
      const onChange = () => {
-         dispatch(createToggle<number>(id))
+        //  dispatch(createToggle<number>(id))
+        toggleTodo(id)
      }
      const onRemove = () =>{
 
-         dispatch(createRemove<number>(id))
+        //  dispatch(createRemove<number>(id))
+        removeTodo(id)
      }
      const onDouble = ()=>{
         setEditable(true)
@@ -77,7 +97,8 @@ const TodoItem:FC<ITItem> =(props)=>{
      const onKeyUpChange = () =>{
          console.log(LabelRef.current?.innerHTML)
          const text = LabelRef.current?.innerHTML || ''
-         dispatch(createEdit<Iedit>({id,text}))
+        //  dispatch(createEdit<Iedit>({id,text}))
+        editTodo({id,text})
      }
 return <li>
         <Checkbox onChange ={onChange} checked={complete}/>
@@ -87,11 +108,11 @@ return <li>
 }
 const Todos:FC<ITprops> = (props)=>{
     console.log(props.todos)
-    const {todos,dispatch} = props
+    const {todos,removeTodo,toggleTodo,editTodo} = props
     return (
         <ul>
             {
-                todos.map((todo:List) => <TodoItem key={todo.id} todo={todo} dispatch={dispatch}/>)
+                todos.map((todo:List) => <TodoItem key={todo.id} todo={todo} removeTodo={removeTodo}  toggleTodo={toggleTodo} editTodo={editTodo}/>)
             }
         </ul>
     )
@@ -117,7 +138,7 @@ const TodoList:FC = ()=>{
      }))
    },[])
 
-   const dispatch = (action:IAction<any>) =>{
+   const dispatch = useCallback((action:IAction<any>) =>{
      const {type,payload} = action
      switch(type){
         case 'add':
@@ -137,9 +158,9 @@ const TodoList:FC = ()=>{
         setTodos((todos:List[])=> todos.map((todo:List)=>{
             return todo.id === payload.id ?{...todo,text:payload.text}:todo
         }))
-
+        default:
      }
-   }
+   },[])
    useEffect(()=>{
     const todos = JSON.parse(localStorage.getItem(LS_KEY)||'[]')
     setTodos(todos)
@@ -151,8 +172,12 @@ const TodoList:FC = ()=>{
   
    return (
        <div className="todo-list">
-           <Control dispatch={dispatch}/>
-           <Todos  todos={todos} dispatch={dispatch}/>
+           <Control {...bindActionCreateor({addTodo:createAdd},dispatch)}/>
+           <Todos  todos={todos} {...bindActionCreateor({
+               removeTodo:createRemove,
+               toggleTodo:createToggle,
+               editTodo:createEdit
+               },dispatch)}/>
        </div>
    )
 }

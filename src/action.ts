@@ -4,6 +4,13 @@ export function createAdd<T>(payload:T){
         payload
     }
 }
+
+// addTodo = (payload) => dispatch(createAdd(payload)) 改造
+
+// {
+//     addTodo:createAdd
+//     removeTodo:createRemove
+// }
 export function createRemove<T>(payload:T){
     return {
         type:'remove',
