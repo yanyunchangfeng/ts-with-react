@@ -20,6 +20,41 @@ function bindActionCreateor(actionCreators:actionCreators,dispatch:dispatch){
     }
     return ret
 }
+function reducer(state:any,action:any){
+    const {type,payload} = action
+    const {todos,increment} = state
+    switch(type){
+        case 'add':
+            return {
+                ...state,
+                todos:[...todos,payload]
+            }
+        case 'toggle':
+            return {
+                ...state,
+                todos: todos.map((todo:List)=>{
+                    return todo.id === payload ? {...todo,complete:!todo.complete}:todo
+                })
+            }
+          
+        case 'remove':
+            return {
+                ...state,
+                todos: todos.filter((todo:any) => {
+                    return todo.id !== payload
+                })
+            }
+        case 'edit': 
+        return {
+            ...state,
+            todos: todos.map((todo:List)=>{
+                return todo.id === payload.id ?{...todo,text:payload.text}:todo
+            })
+        }
+        default:
+     }
+    return state
+}
 interface List {
     text:string;
     complete:boolean;
@@ -119,6 +154,7 @@ const Todos:FC<ITprops> = (props)=>{
 }
 const TodoList:FC = ()=>{
    const [todos,setTodos] = useState<List[]>([])
+   const [increment,setIncrement] = useState(0)
    const addTodo = useCallback((todo:List)=>{
        setTodos((todos:List[]) => [...todos,todo])
    },[])
@@ -139,28 +175,20 @@ const TodoList:FC = ()=>{
    },[])
 
    const dispatch = useCallback((action:IAction<any>) =>{
-     const {type,payload} = action
-     switch(type){
-        case 'add':
-            setTodos((todos:List[]) => [...todos,payload]);
-            break;
-        case 'toggle':
-            setTodos((todos:List [])=>todos.map((todo:List)=>{
-                return todo.id === payload ? {...todo,complete:!todo.complete}:todo
-            }));
-            break;
-        case 'remove':
-            setTodos((todos:List []) => todos.filter((todo:any) => {
-                return todo.id !== payload
-            }));
-            break;
-        case 'edit': 
-        setTodos((todos:List[])=> todos.map((todo:List)=>{
-            return todo.id === payload.id ?{...todo,text:payload.text}:todo
-        }))
-        default:
+     const state = {
+         todos,
+         increment
      }
-   },[])
+     const setters:any = {
+         todos:setTodos,
+         increment:setIncrement
+     }
+     const newState = reducer(state,action)
+     for(let key in newState){
+         setters[key](newState[key])
+     }
+  
+   },[todos,increment])
    useEffect(()=>{
     const todos = JSON.parse(localStorage.getItem(LS_KEY)||'[]')
     setTodos(todos)
