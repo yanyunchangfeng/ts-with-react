@@ -57,6 +57,7 @@ const  App:React.FC = () => {
   const [count,setCount] = useCount(0) 
   const [clickCount,setClickCount]  = useState(0)
   const double = useMemo(()=>{
+    console.log('one')
     return count * 2
   },[count === 3]) //当count为3或4的时候double会改变
 
@@ -120,7 +121,15 @@ const  App:React.FC = () => {
     })
   })
   return (
+
+     
      <Router>
+       <div  style={{height:'1000px'}}>
+        <header style={{height:'300px',flex:1}}></header>
+        <main style={{height:'1000px',flex:1}}></main>
+        <footer style={{height:'300px',flex:1}}></footer>
+        </div>
+        <Counters/>
     <div className="App">
       <div className="border">
          <div className="img-container">
@@ -130,7 +139,7 @@ const  App:React.FC = () => {
       <ThemeContext.Provider value={theme}>
         <TodoList/>
         {/* <RenderArray/> */}
-        {/* <button onClick={()=>setCount(count+1)}>Click({count}),Double({double}),Half({half}),clickCount({clickCount})</button> */}
+        <button onClick={()=>setCount(count+1)}>Click({count}),Double({double}),Half({half}),clickCount({clickCount})</button>
         {/* <CounterMeMo count={double} onClick={onClickCallback}/> */}
       {/* <header className="App-header"> */}
         {/* <img src={logo} className="App-logo" alt="logo" /> */}

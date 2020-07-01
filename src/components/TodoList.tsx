@@ -1,7 +1,7 @@
 import React ,{FC, useState, useCallback, useEffect, ChangeEvent, useRef, RefObject}from 'react'
 import {Form, Input, Checkbox, Button } from 'antd'
 import { List } from 'antd/lib/form/Form';
-import {createAdd,createRemove,createEdit,createToggle} from '../action'
+import {createAdd,createRemove,createEdit,createToggle,createSet} from '../action'
 let idSeq = Date.now();
 
 
@@ -9,12 +9,17 @@ type dispatch = (action:IAction<any>) => void
 interface actionCreators {
     [key:string]:(...arg:any) => any
 }
+let store ={
+    todos:[],
+    increment:0
+}
 function bindActionCreateor(actionCreators:actionCreators,dispatch:dispatch){
     const ret:any = {};
     for (let key in actionCreators){
         ret[key] = function(...args:any){
              const actionCreator = actionCreators[key]
              const action = actionCreator(...args)
+
              dispatch(action)
         }
     }
@@ -24,6 +29,13 @@ function reducer(state:any,action:any){
     const {type,payload} = action
     const {todos,increment} = state
     switch(type){
+
+    case 'set':
+        return {
+            ...state,
+            todos:payload,
+            increment:increment + 1 
+        }
         case 'add':
             return {
                 ...state,
@@ -55,6 +67,61 @@ function reducer(state:any,action:any){
      }
     return state
 }
+function combineReducers(reducers:any){
+    return function reducer(state:any,action:any){
+        const changed:any = {};
+       for (let key in reducers){
+
+           changed[key] = reducers[key](state[key],action)
+       }
+       return {
+           ...state,
+           ...changed
+       }
+    }
+}
+const reducers = {
+    todos(state:any,action:any){
+        const {type,payload} = action
+        // const {todos,increment} = state
+        switch(type){
+            case 'set':
+                return payload;
+            case 'add':
+                return [...state,payload]
+            
+            case 'toggle':
+                return state.map((todo:List)=>{
+                        return todo.id === payload ? {...todo,complete:!todo.complete}:todo
+                    })
+                
+              
+            case 'remove':
+                return  state.filter((todo:any) => {
+                        return todo.id !== payload
+                    })
+               
+            case 'edit': 
+                 return state.map((todo:List)=>{
+                    return todo.id === payload.id ?{...todo,text:payload.text}:todo
+                })
+            
+            default:
+         }
+        return state
+    },
+    increment(state:any,action:any){
+        const {type,payload} = action
+        switch(type){
+            case 'set':
+            case 'add':
+                return state+1
+        }
+        return state
+    }
+}
+const newReducer = combineReducers(reducers)
+
 interface List {
     text:string;
     complete:boolean;
@@ -174,24 +241,32 @@ const TodoList:FC = ()=>{
      }))
    },[])
 
-   const dispatch = useCallback((action:IAction<any>) =>{
-     const state = {
-         todos,
-         increment
-     }
+   const dispatch = (action:any) =>{
+    //  const state = {
+    //      todos,
+    //      increment
+    //  }
      const setters:any = {
          todos:setTodos,
          increment:setIncrement
      }
-     const newState = reducer(state,action)
+     if ('function' === typeof action){
+         action(dispatch,() => store )
+         return;
+     }
+     const newState = newReducer(store,action)
      for(let key in newState){
          setters[key](newState[key])
      }
   
+   }
+   useEffect(()=>{
+        Object.assign(store,{todos,increment})
    },[todos,increment])
    useEffect(()=>{
     const todos = JSON.parse(localStorage.getItem(LS_KEY)||'[]')
-    setTodos(todos)
+    // setTodos(todos)
+    dispatch(createSet(todos))
 },[])
    useEffect(()=>{
     localStorage.setItem(LS_KEY,JSON.stringify(todos))

@@ -21,11 +21,11 @@ const Counter:FC = () =>{
 
   return (
       <>
-  <h1>Now:{count},before:{prevCount}
+  <h1>Now:{count},before:{prevCount}</h1>
   <h3>name:{name.current}</h3>
   <button onClick={() => setCount(count+1)}>ADD</button>
   <button onClick ={forceUpdate}>强制更新组件</button>
-  </h1>
+  
   </>)
 }
 

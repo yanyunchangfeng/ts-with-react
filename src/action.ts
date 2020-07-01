@@ -1,7 +1,28 @@
-export function createAdd<T>(payload:T){
+import TodoList from "./components/TodoList";
+
+export function createSet<T>(payload:T){
     return {
-        type:'add',
+        type:'set',
         payload
+    }
+}
+export function createAdd(payload:any){
+    // return {
+    //     type:'add',
+    //     payload
+    // }
+    return (dispatch:any,getState:any) =>{
+     
+
+        setTimeout(()=>{
+            const {todos} = getState();
+            if(!todos.find( (todo:any) => todo.text === payload.text)){
+                dispatch({
+                    type:'add',
+                    payload:payload
+                })
+            }
+        },3000)
     }
 }
 
