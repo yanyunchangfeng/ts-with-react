@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-const useCounter = (count:number)=>{
+const useCounter = (count: number) => {
+    useEffect(()=>{
+        
+    })
     return (
-    <h1>{count}</h1>
+        <h1></h1>
     )
 }
 
