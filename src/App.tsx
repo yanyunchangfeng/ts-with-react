@@ -20,7 +20,8 @@ import Counters from './components/Counter'
 import { HashRouter as Router, useHistory, Route, Switch, Redirect } from 'react-router-dom'
 import useCounter from './hooks/useCounter';
 import Todo from './components/Todo'
-// import TodoList from './components/TodoList'
+import TodoList from './components/TodoList'
+import Foo from './components/Foo';
 
 
 interface IThemeProps {
@@ -57,6 +58,11 @@ const App: React.FC = () => {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
+  const  [person,setPerson] = useState<any>({
+    person:{
+      age:0
+    }
+  })
   const [count, setCount] = useCount(0)
   const [clickCount, setClickCount] = useState(0)
   const double = useMemo(() => {
@@ -138,6 +144,10 @@ const App: React.FC = () => {
   const onButtonClick = ()=>{
       inputRef.current.focus()
   }
+  const onButtonClickF = ()=>{
+      person.person.age++;
+      setPerson(person)
+  }
   return (
 
 
@@ -151,13 +161,15 @@ const App: React.FC = () => {
           </div>
         </div> */}
         <ThemeContext.Provider value={theme}>
-          {/* <TodoList/> */}
+          <TodoList/>
           {/* <RenderArray/> */}
           <button onClick={() => setCount(count + 1)}>Click({count}),Double({double}),Half({half}),clickCount({clickCount})</button>
           <CounterMeMo count={double} onClick={onclickmemo}/>
-
+           
           <FancyInput ref={inputRef} count={count}/>
           <button onClick={onButtonClick}>Focus the input</button>
+          <Button onClick= {onButtonClickF}>addAge</Button>
+          <Foo person={person.person} />
           {/* <header className="App-header"> */}
           {/* <img src={logo} className="App-logo" alt="logo" /> */}
           {/* <p>
@@ -168,7 +180,7 @@ const App: React.FC = () => {
           {/* <button onClick={()=> toggleTheme()}>Toggle THEME</button> */}
           {/* <Hello message="Hello World"/> */}
           {/* <ClassLike/> */}
-          {/* <LikeButton/> */}
+          <LikeButton/>
           {/* {show&&<MouseTracker/>} */}
           {/* <a
           className="App-link"

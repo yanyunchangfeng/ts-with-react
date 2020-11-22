@@ -42,10 +42,11 @@ const LikeButton:React.FC =()=>{
     //     </>
     // )
     function handleClick(){
-        history.push('/hello')
-        // setTimeout(()=>{
-        //   alert(`you clicked on ${likeRef.current}`)
-        // },3000)
+        // history.push('/hello')
+        setTimeout(()=>{
+          alert(`you clicked on ${likeRef.current}`)
+        //   alert(`you clicked on ${like}`)
+        },3000)
     }
     useEffect(()=>{
     //    console.log('document title effect is running')
