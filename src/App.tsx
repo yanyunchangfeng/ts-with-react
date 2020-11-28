@@ -23,7 +23,9 @@ import Todo from './components/Todo'
 import TodoList from './components/TodoList'
 import Foo from './components/Foo';
 
-
+// 原来类组件的pureComponent局限性1 只有传入的props第一级发生变化，才会重新渲染
+// 原来类组件的pureComponent局限性2 传入的回调函数必须绑定到类属性上 否则会引发重新渲染
+// 推论：拆分那些细的组件，传入的属性越简单，那么使用memo和pureComponent的机会就越多
 interface IThemeProps {
   [key: string]: { color: string; background: string }
 }
@@ -148,12 +150,15 @@ const App: React.FC = () => {
       person.person.age++;
       setPerson(person)
   }
+  useEffect(()=>{
+       
+  },[])
   return (
 
 
     <Router>
       <Todo />
-      {/* <Counters/> */}
+      <Counters/>
       <div className="App">
         {/* <div className="border">
           <div className="img-container">
