@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef ,lazy,Suspense, Component} from 'react';
 import logo from './logo.svg';
 import Hello from './components/Hello';
 import LikeButton from './components/LikeButton';
@@ -22,7 +22,8 @@ import useCounter from './hooks/useCounter';
 import Todo from './components/Todo'
 import TodoList from './components/TodoList'
 import Foo from './components/Foo';
-
+import ErrorBoundary from './errorBoundory';
+  const About  = lazy(()=>import(/*webpackChunkName:"about"*/'./about')); //注释相当于给异步的chunk添加别名
 // 原来类组件的pureComponent局限性1 只有传入的props第一级发生变化，才会重新渲染
 // 原来类组件的pureComponent局限性2 传入的回调函数必须绑定到类属性上 否则会引发重新渲染
 // 推论：拆分那些细的组件，传入的属性越简单，那么使用memo和pureComponent的机会就越多
@@ -154,9 +155,10 @@ const App: React.FC = () => {
        
   },[])
   return (
-
-
+    
+   
     <Router>
+      
       <Todo />
       <Counters/>
       <div className="App">
@@ -170,7 +172,11 @@ const App: React.FC = () => {
           {/* <RenderArray/> */}
           <button onClick={() => setCount(count + 1)}>Click({count}),Double({double}),Half({half}),clickCount({clickCount})</button>
           <CounterMeMo count={double} onClick={onclickmemo}/>
-           
+          <ErrorBoundary>
+              <Suspense fallback={'loading'}>
+                  <About/>
+              </Suspense>
+          </ErrorBoundary>
           <FancyInput ref={inputRef} count={count}/>
           <button onClick={onButtonClick}>Focus the input</button>
           <Button onClick= {onButtonClickF}>addAge</Button>
@@ -198,6 +204,14 @@ const App: React.FC = () => {
           {/* </header> */}
           {/* {Counter} */}
         </ThemeContext.Provider>
+        <Warp>
+          {/* {[1,2,3,4,5].map(val=><div>val</div>)}
+           */}
+           <div>1</div>
+           <div>1</div>
+           <div>1</div>
+           <div>1</div>
+        </Warp>
         {/* <Form {...layout} onFinish={onFinish} form={form} className='pd-20 wd-600' id="control-hook">
         <Form.Item name="userName" label="用户名" rules={[{ required: true,pattern:/^\w{6}$/ ,message:'用户名为6位数字字母或下滑线'}]}>
           <Input />
@@ -235,3 +249,20 @@ const App: React.FC = () => {
 }
 
 export default App;
+// export default class App extends Component{
+//      state ={
+//        hasError:false
+//      }
+//        static getDerivedStateFromError(error:any) {
+//         // 更新 state 使下一次渲染能够显示降级后的 UI
+//         return { hasError: true };
+//       }
+//       render(){
+//         if(this.state.hasError){
+//             return <>someThing we wrong</>
+//         }
+//         return  <Suspense fallback={'loading'}>
+//               <About/>
+//     </Suspense>
+//     }
+// }
