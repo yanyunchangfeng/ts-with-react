@@ -23,10 +23,16 @@ import Todo from './components/Todo'
 import TodoList from './components/TodoList'
 import Foo from './components/Foo';
 import ErrorBoundary from './errorBoundory';
+import HookLifeCycle from './components/hookLifeCycle';
+import HookLife from './components/hookLifeCycle';
   const About  = lazy(()=>import(/*webpackChunkName:"about"*/'./about')); //注释相当于给异步的chunk添加别名
 // 原来类组件的pureComponent局限性1 只有传入的props第一级发生变化，才会重新渲染
 // 原来类组件的pureComponent局限性2 传入的回调函数必须绑定到类属性上 否则会引发重新渲染
 // 推论：拆分那些细的组件，传入的属性越简单，那么使用memo和pureComponent的机会就越多
+
+
+ // getSnapshotBeforeUpdate,componentDidCatch,getDerivedStateFromError 这些生命周期函数 ，函数组件无法实现
+//shouldComponentUpdate 对应的就是memo组件了
 interface IThemeProps {
   [key: string]: { color: string; background: string }
 }
@@ -160,6 +166,7 @@ const App: React.FC = () => {
     <Router>
       
       <Todo />
+      {count==0?<HookLife/>:''}
       <Counters/>
       <div className="App">
         {/* <div className="border">
