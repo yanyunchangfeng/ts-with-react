@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef ,lazy,Suspense, Component} from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef ,memo,lazy,Suspense, Component,FC} from 'react';
 import logo from './logo.svg';
 import Hello from './components/Hello';
 import LikeButton from './components/LikeButton';
@@ -40,6 +40,14 @@ import HookLife from './components/hookLifeCycle';
 //          3.Hooks中如何获取历史的props和state？components/Counter
 //          4.如何强制更新一个Hooks组件？components/Counter
 
+interface Iprops {
+  onClick:any,
+  count:number,
+  [key:string]:any
+}
+const CounterF:FC<Iprops> = memo((props)=>{
+return (<h1 onClick={props.onClick}>{props.count}</h1>)
+})
 interface IThemeProps {
   [key: string]: { color: string; background: string }
 }
@@ -69,6 +77,7 @@ export const ThemeContext = React.createContext(themes.light)
 const App: React.FC = () => {
   const history = useHistory();
   const inputRef = useRef<any>()
+  const CountFRef = useRef<any>()
   // console.log(history)
   const layout = {
     labelCol: { span: 8 },
@@ -128,10 +137,11 @@ const App: React.FC = () => {
       console.log('click')
     }
   }, [])
-  // const onClickCallback = useCallback(() => {
-  //   console.log('click')
-  //   setClickCount(clickCount => clickCount + 1)
-  // }, [])
+  const onClickCallback = useCallback(() => {
+    console.log('click')
+    setClickCount(clickCount => clickCount + 1)
+    console.log(CountFRef.current)
+  }, [])
 
   const onclickmemo = useMemo(()=>{
     return ()=>{
@@ -156,6 +166,7 @@ const App: React.FC = () => {
     window.addEventListener('load',()=>{
       console.log('addd')
     })
+    CountFRef.current = "yycf";
   },[])
   const onButtonClick = ()=>{
       inputRef.current.focus()
@@ -177,6 +188,7 @@ const App: React.FC = () => {
       <Todo />
       {count==0?<HookLife/>:''}
       <Counters/>
+      <CounterF onClick={onClickCallback} count={clickCount} ref={CountFRef}/> {/*Warning: Function components cannot be given refs. Attempts to access this ref will fail.  想想也正常毕竟只有类组件才能被实例化*/ }
       <div className="App" data-d="4444">
         {/* <div className="border">
           <div className="img-container">

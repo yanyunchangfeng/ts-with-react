@@ -43,6 +43,9 @@
 __ 在渲染的时候react会警告，没有key的话会认为是动态产生的
 * [warp](src/components/Warp.tsx) 
 
+## Hooks的优势
+优化类组件的三大问题
+1. 方便复用状态逻辑 Custom Hooks
 ## npx 小知识  
 
 * 1. 避免安装全局模块 
