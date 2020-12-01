@@ -33,6 +33,13 @@ import HookLife from './components/hookLifeCycle';
 
  // getSnapshotBeforeUpdate,componentDidCatch,getDerivedStateFromError 这些生命周期函数 ，函数组件无法实现
 //shouldComponentUpdate 对应的就是memo组件了
+// Hooks的常见问题
+//      对传统React编程的影响
+//          1.生命周期 函数如何映射到Hooks？  components/hookLifeCycle components/getDerivedStateFromProps
+//          2.类实例成员变量如何映射到Hooks？ components/LikeButton
+//          3.Hooks中如何获取历史的props和state？components/Counter
+//          4.如何强制更新一个Hooks组件？components/Counter
+
 interface IThemeProps {
   [key: string]: { color: string; background: string }
 }

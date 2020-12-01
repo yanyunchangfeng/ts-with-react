@@ -1,8 +1,8 @@
-import React, {useState,useEffect, useRef,useContext} from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import useMousePosition from '../hooks/useMousePosition'
-import {useHistory, useLocation, useParams,useRouteMatch} from 'react-router-dom'
-import {ThemeContext} from '../App'
-const LikeButton:React.FC =()=>{
+import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom'
+import { ThemeContext } from '../App'
+const LikeButton: React.FC = () => {
     // const [like,setLike] = useState(0)
     // const [obj,setObj] = useState({like:0,on:true})
     // 拆分
@@ -13,8 +13,8 @@ const LikeButton:React.FC =()=>{
     const location = useLocation();
     // console.log(history)
     // console.log(location)
-    const [like,setLike] = useState(0)
-    const [on,setOn] = useState(true)
+    const [like, setLike] = useState(0)
+    const [on, setOn] = useState(true)
     const likeRef = useRef(0);
     const positions = useMousePosition()
     const didUpdateRef = useRef(false);// 模拟生命周期componentDidUpdate
@@ -23,8 +23,8 @@ const LikeButton:React.FC =()=>{
     const theme = useContext(ThemeContext)
     // console.log(theme)
     const style = {
-        background:theme.background,
-        color:theme.color
+        background: theme.background,
+        color: theme.color
     }
     //空节点包含两个button
     // return (
@@ -41,40 +41,39 @@ const LikeButton:React.FC =()=>{
     //     </button>
     //     </>
     // )
-    function handleClick(){
+    function handleClick() {
         // history.push('/hello')
-        setTimeout(()=>{
-          alert(`you clicked on ${likeRef.current}`)
-        //   alert(`you clicked on ${like}`)
-        },3000)
+        setTimeout(() => {
+            alert(`you clicked on ${likeRef.current}`)
+            //   alert(`you clicked on ${like}`)
+        }, 3000)
     }
-    useEffect(()=>{
-    //    console.log('document title effect is running')
-       if(didUpdateRef.current){
-         console.log('componentDidUpdate')
-       }else{
-           didUpdateRef.current = true
-       }
-       document.title = `点击了${like}次`
-    },[like,on])
-        return (
-        match&&<>
-        <input type="text" ref={domRef}/>
-        <h2>X:{positions.x} Y:{positions.y}</h2>
-            <button  style ={style} onClick ={()=>{ 
-                setLike(like+1);
-                likeRef.current ++
+    useEffect(() => {
+        if (!didUpdateRef.current) {
+            didUpdateRef.current = true
+        } else {
+            console.log('componentDidUpdate')
+            document.title = `点击了${like}次`
+        }
+    })
+    return (
+        match && <>
+            <input type="text" ref={domRef} />
+            <h2>X:{positions.x} Y:{positions.y}</h2>
+            <button style={style} onClick={() => {
+                setLike(like + 1);
+                likeRef.current++
             }}>
                 {like}
             </button>
-            <button onClick ={()=>{ 
+            <button onClick={() => {
                 setOn(!on)
             }}>
-                {on?'ON':'OFF'}
+                {on ? 'ON' : 'OFF'}
             </button>
-            <button onClick ={ handleClick
+            <button onClick={handleClick
             }>
-              Alert！
+                Alert！
             </button>
         </>
     )

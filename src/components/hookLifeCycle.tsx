@@ -2,6 +2,7 @@ import  React, { FC, useEffect, useRef, useState,memo } from 'react';
 
 const HookLife:FC = memo(()=>{
     const [count,setCount] = useState(0)
+    const didUpdateRef = useRef(false);// 模拟生命周期componentDidUpdate
     useEffect(()=>{
         console.log('componentDidMout')
       return ()=>{
@@ -13,6 +14,13 @@ const HookLife:FC = memo(()=>{
     useEffect(()=>{
         if(renderCount.current > 1){
           console.log('componentDidUpdate')
+        }
+    })
+    useEffect(() => {
+        if (!didUpdateRef.current) {
+            didUpdateRef.current = true
+        } else {
+            console.log('componentDidUpdate')
         }
     })
     return (<>
