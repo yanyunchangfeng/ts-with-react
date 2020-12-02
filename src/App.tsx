@@ -94,6 +94,9 @@ const App: React.FC = () => {
     console.log('one')
     return count * 2
   }, [count === 3]) //当count为3或4的时候double会改变
+  // 是这样运行的 首先count 默认值为 0 ,条件为false double为0， 
+  // 当count等于三,条件为true double重新计算，
+  // 当count为4，条件又变为false，double 重新计算。
 
   const half = useMemo(() => {
     return double / 4
@@ -146,6 +149,7 @@ const App: React.FC = () => {
   const onclickmemo = useMemo(()=>{
     return ()=>{
         console.log('click')
+        CountFRef.current++
     }
   },[])
   const onClickCb = ()=>{
@@ -166,7 +170,7 @@ const App: React.FC = () => {
     window.addEventListener('load',()=>{
       console.log('addd')
     })
-    CountFRef.current = "yycf";
+    CountFRef.current = 0;
   },[])
   const onButtonClick = ()=>{
       inputRef.current.focus()
