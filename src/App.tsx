@@ -17,6 +17,7 @@ import useCount from './hooks/useCount';
 import CounterMeMo from './components/memo'
 import Warp from './components/Warp';
 import Counters from './components/Counter'
+import useSize from './hooks/useSize';
 import { HashRouter as Router, useHistory, Route, Switch, Redirect } from 'react-router-dom'
 import useCounter from './hooks/useCounter';
 import Todo from './components/Todo'
@@ -46,7 +47,8 @@ interface Iprops {
   [key:string]:any
 }
 const CounterF:FC<Iprops> = memo((props)=>{
-return (<h1 onClick={props.onClick}>{props.count}</h1>)
+  const size = useSize()
+return (<h1 onClick={props.onClick}>{props.count}{size.width}X{size.height}</h1>)
 })
 interface IThemeProps {
   [key: string]: { color: string; background: string }
@@ -78,6 +80,7 @@ const App: React.FC = () => {
   const history = useHistory();
   const inputRef = useRef<any>()
   const CountFRef = useRef<any>()
+  const size = useSize();
   // console.log(history)
   const layout = {
     labelCol: { span: 8 },
@@ -191,8 +194,10 @@ const App: React.FC = () => {
       
       <Todo />
       {count==0?<HookLife/>:''}
-      <Counters/>
-      <CounterF onClick={onClickCallback} count={clickCount} ref={CountFRef}/> {/*Warning: Function components cannot be given refs. Attempts to access this ref will fail.  想想也正常毕竟只有类组件才能被实例化*/ }
+      {size.width}
+      {size.height}
+       
+      {count <10 ? <CounterF onClick={onClickCallback} count={clickCount} ref={CountFRef}/> :''}{/*Warning: Function components cannot be given refs. Attempts to access this ref will fail.  想想也正常毕竟只有类组件才能被实例化*/ }
       <div className="App" data-d="4444">
         {/* <div className="border">
           <div className="img-container">
