@@ -40,6 +40,8 @@ import HookLife from './components/hookLifeCycle';
 //          2.类实例成员变量如何映射到Hooks？ components/LikeButton
 //          3.Hooks中如何获取历史的props和state？components/Counter
 //          4.如何强制更新一个Hooks组件？components/Counter
+const theBiggestInt:bigint = 9007199254740991n;
+console.log(typeof theBiggestInt)
 
 interface Iprops {
   onClick:any,
