@@ -6,7 +6,8 @@ import MouseTracker from './components/MouseTracker';
 import ClassLike from './components/classLike';
 import useMousePosition from './hooks/useMousePosition';
 import useURLLoader from './hooks/useURLLoader';
-import FancyInput from './components/fancyInput'
+import FancyInput from './components/fancyInput';
+import {bubbleSort,insertSort,quickSort,unique,deepClone,isPrime,getMonthData,genColor,copyProperties,mix} from 'yycf-algorithm';
 import { Form, Input, Button } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css'
@@ -42,7 +43,7 @@ import HookLife from './components/hookLifeCycle';
 //          4.如何强制更新一个Hooks组件？components/Counter
 const theBiggestInt:bigint = 9007199254740991n;
 console.log(typeof theBiggestInt)
-
+// console.log(bubbleSort,insertSort,quickSort,unique,deepClone,isPrime,getMonthData,genColor,copyProperties,mix)
 interface Iprops {
   onClick:any,
   count:number,
