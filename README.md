@@ -2,11 +2,11 @@
  ##    对传统React编程的影响
 1. 生命周期 函数如何映射到Hooks？  [hookLifeCycle](src/components/hookLifeCycle.tsx)  |  [getDerivedStateFromProps](src/components/getDerivedStateFromProps.tsx)   
 -- shouldComponentUpdate 对应的就是memo组件了
-2. 类实例成员变量如何映射到Hooks？ [Ref](src/omponents/LikeButton.tsx) 
+2. 类实例成员变量如何映射到Hooks？ [ref](src/components/LikeButton.tsx) 
 -- ref 和直接一个对象有什么区别 ref在所有的render当中都保持着唯一的引用 因此对ref的取值赋值 拿到的都是最终的状态 
 3. Hooks中如何获取历史的props和state？[Ref&useEffect](src/components/Counter.tsx)  
 -- 其实就是利用useRef的特性
-4. 如何强制更新一个Hooks组件？[传建一个不参与渲染的state](src/components/Counter)  
+4. 如何强制更新一个Hooks组件？[创建一个不参与渲染的state](src/components/Counter.tsx)  
 -- forceUpdate就是重新render。有些变量不在state上，当时你又想达到这个变量更新的时候，刷新render；或者state里的某个变量层次太深，更新的时候没有自动触发render。这些时候都可以手动调用forceUpdate自动触发render
 
 
@@ -26,7 +26,7 @@
 * 使用useCallback 确实会创建新的函数，但是不一定会被返回，换句话说很有可能创建的函数就直接抛弃不用了
 * useCallback解决的问题是传入子组件的参数过多变化，导致子组件过多渲染的问题
 * useMemo依赖发生变化一定会重新执行，但不能肯定依赖不发生变化就一定不重新执行，就是说它也可能重新执行
-* [useMomo和useCallbac](src/App.tsx) 
+* [useMomo和useCallback](src/App.tsx) 
 
 ##  函数组件的局限性
  1. getSnapshotBeforeUpdate,componentDidCatch,getDerivedStateFromError 这些生命周期函数 ，函数组件无法实现
