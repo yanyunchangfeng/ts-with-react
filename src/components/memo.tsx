@@ -8,6 +8,7 @@ interface IProps{
     onClick:Function
 }
 const Counter:FC<IProps> = memo( (props)=>{
+console.log("jianba ~🚀: props", props);
     console.log('counter render')
 return <h2 onClick = {() => props.onClick()}> {props.count}</h2>
 })

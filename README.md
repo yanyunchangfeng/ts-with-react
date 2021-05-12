@@ -10,17 +10,17 @@
 -- forceUpdate就是重新render。有些变量不在state上，当时你又想达到这个变量更新的时候，刷新render；或者state里的某个变量层次太深，更新的时候没有自动触发render。这些时候都可以手动调用forceUpdate自动触发render
 
 
-## useMomo与useEffcet的区别
-* useMomo与useEffcet最大的不同就是执行时机 ，useEffect执行是在渲染之后完成的 useMemo需要返回值的 返回值可以直接参与渲染，因此是在渲染期间完成的，有这样一前一后的区别   
+## useMemo与useEffect的区别
+* useMemo与useEffect最大的不同就是执行时机 ，useEffect执行是在渲染之后完成的 useMemo需要返回值的 返回值可以直接参与渲染，因此是在渲染期间完成的，有这样一前一后的区别   
   
-## memo与useMomo的区别  
+## memo与useMemo的区别  
 * memo 是用来优化函数组件重新渲染的行为 函数组件的属性值不发生变化就不会重新渲染 否则就会触发重新渲染
-* memo函数针对的是一个组件的渲染是否重复执行 而useMeMo则是定义了一段函数逻辑是否重复执行
+* memo函数针对的是一个组件的渲染是否重复执行 而useMemo则是定义了一段函数逻辑是否重复执行
 * useMemo  ()=>{} 
 * memo(< Foo/>) 
 * [memo和useMemo](src/components/memo.tsx) 
   
-## useMomo和useCallback的区别  
+## useMemo和useCallback的区别  
 * useMemo(()=>fn) 如果useMemo返回的是一个函数 那么就等价于useCallback
 * useCallback(fn)
 * 使用useCallback 确实会创建新的函数，但是不一定会被返回，换句话说很有可能创建的函数就直接抛弃不用了

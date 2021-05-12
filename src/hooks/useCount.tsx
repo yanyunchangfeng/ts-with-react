@@ -20,17 +20,17 @@ const useCount = (defaultCount: number) => {
         // it.current = setInterval(() => {
         //     setCount((count: number) => count + 1)
         // }, 1000)
-        let a = new Promise((resolve,reject)=>{
-            // setCount(100),
-            setCount(1000000)
-            resolve('')
-        });
-        setCount(1000000)
-        console.log(count)
-        for(let i = 0;i<100;i++){
-            setCount(i)
-        }
-        setTimeout(()=>setCount(999999999),0)
+        // let a = new Promise((resolve,reject)=>{
+        //     // setCount(100),
+        //     setCount(1000000)
+        //     resolve('')
+        // });
+        // setCount(1000000)
+        // console.log(count)
+        // for(let i = 0;i<100;i++){
+        //     setCount(i)
+        // }
+        // setTimeout(()=>setCount(999999999),0)
     }, [])
     useEffect(() => {
         // if (count > 10) {

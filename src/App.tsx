@@ -201,14 +201,15 @@ const App: React.FC = () => {
       {size.height}
        
       {count <10 ? <CounterF onClick={onClickCallback} count={clickCount} ref={CountFRef}/> :''}{/*Warning: Function components cannot be given refs. Attempts to access this ref will fail.  想想也正常毕竟只有类组件才能被实例化*/ }
-      <div className="App" data-d="4444">
+      <div className="App" data-d="4444" >
         {/* <div className="border">
           <div className="img-container">
             <div className="image"></div>
           </div>
         </div> */}
+       
         <ThemeContext.Provider value={theme}>
-          <TodoList/>
+          <TodoList />
           {/* <RenderArray/> */}
           <button onClick={() => setCount(count + 1)}>Click({count}),Double({double}),Half({half}),clickCount({clickCount})</button>
           <CounterMeMo count={double} onClick={onclickmemo}/>
